@@ -1,65 +1,317 @@
-import Image from "next/image";
+"use client";
+
+import { useState } from "react";
+
+type AppData = {
+  appName: string;
+  developer: string;
+  iconUrl: string;
+  category: string;
+  country: string;
+};
 
 export default function Home() {
+
+  const [url, setUrl] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [auditLoading, setAuditLoading] =
+  useState(false);
+  const [appData, setAppData] =
+    useState<AppData | null>(null);
+  const [auditComplete, setAuditComplete] =
+  useState(false);
+  const [auditData, setAuditData] =
+  useState<any>(null);
+
+  async function getMetadata() {
+
+    try {
+
+      setLoading(true);
+
+      const response = await fetch(
+        "/api/metadata",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type":
+              "application/json"
+          },
+          body: JSON.stringify({
+            url
+          })
+        }
+      );
+
+      const data =
+        await response.json();
+
+      setAppData(data);
+
+    } catch (error) {
+
+      console.log(error);
+
+    } finally {
+
+      setLoading(false);
+
+    }
+
+  }
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+    <main className="p-10">
+
+      <h1 className="text-3xl font-bold mb-5">
+        ASO Audit Agent
+      </h1>
+
+      <input
+        className="border p-2 w-full"
+        placeholder="Paste App Store URL"
+        value={url}
+        onChange={(e)=>
+          setUrl(e.target.value)
+        }
+      />
+
+      <button
+        onClick={getMetadata}
+        className="bg-blue-500 text-white px-4 py-2 mt-4"
+      >
+        Analyze
+      </button>
+
+      {loading && (
+        <p className="mt-4">
+          Fetching app...
+        </p>
+      )}
+
+      {appData && ( 
+        
+        <div className="border mt-5 p-5">
+
+          <img
+            src={appData.iconUrl}
+            width={100}
+            alt="app icon"
+          />
+
+          <h2 className="font-bold mt-3">
+            {appData.appName}
+          </h2>
+
+          <p>
+            {appData.developer}
           </p>
+
+          <p>
+            {appData.category}
+          </p>
+
+          <p>
+            Is this the app you meant?
+          </p>
+
+          <div className="flex gap-2 mt-4">
+
+            <button onClick={async () => {
+
+setAuditLoading(true);
+
+setAuditComplete(false);
+
+const response =
+await fetch(
+"/api/audit",
+{
+method:"POST",
+
+headers:{
+"Content-Type":
+"application/json"
+},
+
+body:JSON.stringify({
+url
+})
+}
+);
+
+const data =
+await response.json();
+
+setAuditData(data);
+
+setAuditLoading(false);
+
+setAuditComplete(true);
+
+}}
+              className="bg-green-500 text-white px-4 py-2">
+              Yes
+            </button>
+
+          </div>
+
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
+
+      )}
+    {auditLoading && (
+
+<div className="mt-5 border p-5">
+
+<p className="font-bold">
+Running ASO Audit...
+</p>
+
+<p>Analyzing title...</p>
+
+<p>Analyzing screenshots...</p>
+
+<p>Analyzing ratings...</p>
+
+<p>Comparing competitors...</p>
+
+</div>
+
+)}
+{auditComplete && (
+
+<div className="border mt-5 p-5">
+
+<h2 className="font-bold text-xl">
+ASO Score Card
+</h2>
+
+<p>
+Overall Score:
+{auditData?.overallScore}/100
+</p>
+
+<div className="mt-4">
+
+<p>Title: 8/10</p>
+
+<p>Subtitle: 7/10</p>
+
+<p>Description: 8/10</p>
+
+<p>Screenshots: 6/10</p>
+
+<p>Ratings: 9/10</p>
+
+</div>
+
+<h2 className="font-bold mt-5">
+Quick Wins
+</h2>
+
+<ul>
+
+<ul>
+
+{auditData?.quickWins?.map(
+(item:string,index:number)=>(
+
+<li key={index}>
+{item}
+</li>
+
+))}
+
+</ul>
+
+<li>
+Add stronger CTA
+</li>
+
+<li>
+Optimize subtitle keywords
+</li>
+
+</ul>
+
+<h2 className="font-bold mt-5">
+High Impact Changes
+</h2>
+
+<ul>
+
+<li>
+Redesign first screenshots
+</li>
+
+<li>
+Improve keyword coverage
+</li>
+
+</ul>
+
+<h2 className="font-bold mt-5">
+Strategic Recommendations
+</h2>
+
+<ul>
+
+<li>
+Track competitor keywords
+</li>
+
+<li>
+Test multiple product pages
+</li>
+
+</ul>
+
+<h2 className="font-bold mt-5">
+Competitor Comparison
+</h2>
+
+<table className="border w-full">
+
+<tbody>
+
+<tr>
+
+<td>Apple Music</td>
+
+<td>4.7</td>
+
+<td>Strong ecosystem</td>
+
+</tr>
+
+<tr>
+
+<td>YouTube Music</td>
+
+<td>4.8</td>
+
+<td>Strong discovery</td>
+
+</tr>
+
+<tr>
+
+<td>Amazon Music</td>
+
+<td>4.5</td>
+
+<td>Large catalog</td>
+
+</tr>
+
+</tbody>
+
+</table>
+
+</div>
+
+)}
+    </main>
   );
+
 }
