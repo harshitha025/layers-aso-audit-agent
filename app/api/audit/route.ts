@@ -1,7 +1,8 @@
 import { NextResponse } from "next/server";
 
 import { fetchAppMetadata } from "@/lib/app-store";
-import { generateAudit } from "@/lib/audit-engine";
+import { runAsoAudit } from "@/lib/llm";
+import { parseAuditResponse } from "@/lib/parse-audit";
 
 export async function POST(
   request: Request
@@ -16,8 +17,13 @@ export async function POST(
         body.url
       );
 
-    const audit =
-      generateAudit(app);
+    const llmResponse =
+await runAsoAudit(app);
+
+const audit =
+parseAuditResponse(
+llmResponse
+);
 
     return NextResponse.json(
       audit

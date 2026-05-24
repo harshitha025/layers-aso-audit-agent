@@ -188,125 +188,181 @@ ASO Score Card
 
 <p>
 Overall Score:
-{auditData?.overallScore}/100
+{" "}
+{auditData?.overallScore ?? 0}/100
 </p>
-
 <div className="mt-4">
 
-<p>Title: 8/10</p>
+<h3 className="font-bold mb-3">
+Dimension Scores
+</h3>
 
-<p>Subtitle: 7/10</p>
+{Object.entries(
+auditData?.dimensionScores || {}
+).map(([key,value]) => (
 
-<p>Description: 8/10</p>
+<div
+key={key}
+className="mb-3"
+>
 
-<p>Screenshots: 6/10</p>
+<div className="flex justify-between">
 
-<p>Ratings: 9/10</p>
+<span className="capitalize">
+{key}
+</span>
+
+<span>
+{Number(value)}/10
+</span>
 
 </div>
 
-<h2 className="font-bold mt-5">
+<div className="w-full bg-gray-200 rounded h-3">
+
+<div
+className="bg-blue-500 h-3 rounded"
+style={{
+width:`${Number(value)*10}%`
+}}
+/>
+
+</div>
+
+</div>
+
+))}
+
+</div>
+
+<div className="mt-4">
+
+
+
+</div>
+
+{/* Quick Wins */}
+
+<div className="mt-8">
+
+<h3 className="font-bold text-lg mb-3">
 Quick Wins
-</h2>
+</h3>
 
-<ul>
-
-<ul>
+<div className="grid gap-3">
 
 {auditData?.quickWins?.map(
 (item:string,index:number)=>(
 
-<li key={index}>
-{item}
-</li>
+<div
+key={index}
+className="border rounded p-3 bg-green-50"
+>
+✓ {item}
+</div>
 
-))}
+)
+)}
 
-</ul>
+</div>
 
-<li>
-Add stronger CTA
-</li>
+</div>
 
-<li>
-Optimize subtitle keywords
-</li>
 
-</ul>
+{/* High Impact Changes */}
 
-<h2 className="font-bold mt-5">
+<div className="mt-8">
+
+<h3 className="font-bold text-lg mb-3">
 High Impact Changes
-</h2>
+</h3>
 
-<ul>
+<div className="grid gap-3">
 
-<li>
-Redesign first screenshots
-</li>
+{auditData?.highImpactChanges?.map(
+(item:string,index:number)=>(
 
-<li>
-Improve keyword coverage
-</li>
+<div
+key={index}
+className="border rounded p-3 bg-yellow-50"
+>
+⚡ {item}
+</div>
 
-</ul>
+)
+)}
 
-<h2 className="font-bold mt-5">
+</div>
+
+</div>
+
+
+{/* Strategic Recommendations */}
+
+<div className="mt-8">
+
+<h3 className="font-bold text-lg mb-3">
 Strategic Recommendations
-</h2>
+</h3>
 
-<ul>
+<div className="grid gap-3">
 
-<li>
-Track competitor keywords
-</li>
+{auditData?.strategicRecommendations?.map(
+(item:string,index:number)=>(
 
-<li>
-Test multiple product pages
-</li>
+<div
+key={index}
+className="border rounded p-3 bg-blue-50"
+>
+📈 {item}
+</div>
 
-</ul>
+)
+)}
 
-<h2 className="font-bold mt-5">
+</div>
+
+</div>
+
+
+{/* Competitors */}
+
+<div className="mt-8">
+
+<h3 className="font-bold text-lg mb-3">
 Competitor Comparison
-</h2>
+</h3>
 
-<table className="border w-full">
+<div className="grid gap-4">
 
-<tbody>
+{auditData?.competitorComparison?.map(
+(competitor:any,index:number)=>(
 
-<tr>
+<div
+key={index}
+className="border rounded p-4 shadow-sm"
+>
 
-<td>Apple Music</td>
+<h4 className="font-bold">
+{competitor.name}
+</h4>
 
-<td>4.7</td>
+<p>
+⭐ Rating: {competitor.rating}
+</p>
 
-<td>Strong ecosystem</td>
+<p>
+Strength: {competitor.strength}
+</p>
 
-</tr>
+</div>
 
-<tr>
+)
+)}
 
-<td>YouTube Music</td>
+</div>
 
-<td>4.8</td>
-
-<td>Strong discovery</td>
-
-</tr>
-
-<tr>
-
-<td>Amazon Music</td>
-
-<td>4.5</td>
-
-<td>Large catalog</td>
-
-</tr>
-
-</tbody>
-
-</table>
+</div>
 
 </div>
 
