@@ -1,36 +1,50 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# ASO Audit Agent
 
-## Getting Started
+AI-powered App Store Optimization audit tool built with Next.js, TypeScript, and NVIDIA LLM APIs.
 
-First, run the development server:
+## Features
 
-```bash
+- Paste Apple App Store URL
+- Fetch metadata
+- Confirm app selection
+- AI-generated ASO audit
+- Overall ASO score
+- Dimension score visualization
+- Quick Wins
+- High Impact Changes
+- Strategic Recommendations
+- Competitor comparison
+
+## Tech Stack
+
+- Next.js
+- TypeScript
+- NVIDIA API (Llama)
+- Tailwind CSS
+- Mastra project structure
+
+## Setup
+
+Install dependencies:
+
+npm install
+
+Run locally:
+
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Create:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+.env.local
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Add:
 
-## Learn More
+NVIDIA_API_KEY=your_key
 
-To learn more about Next.js, take a look at the following resources:
+## Design Decisions
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- Reduced model size from 70B → 8B for faster response
+- Structured JSON output for reliable rendering
+- Dynamic competitor generation
+- Progress visualization for dimension scores
+- Modular architecture separating metadata, LLM, parsing, and UI
