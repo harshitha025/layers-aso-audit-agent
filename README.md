@@ -1,26 +1,25 @@
 # ASO Audit Agent
 
-AI-powered App Store Optimization audit tool built with Next.js, TypeScript, and NVIDIA LLM APIs.
+AI-powered App Store Optimization audit tool built with Next.js, TypeScript, NVIDIA LLM APIs and Mastra architecture.
 
 ## Features
 
-- Paste Apple App Store URL
-- Fetch metadata
-- Confirm app selection
+- Paste App Store URL
+- Metadata extraction and confirmation flow
 - AI-generated ASO audit
 - Overall ASO score
 - Dimension score visualization
 - Quick Wins
 - High Impact Changes
 - Strategic Recommendations
-- Competitor comparison
+- Competitor comparison dashboard
 
 ## Tech Stack
 
 - Next.js
 - TypeScript
-- NVIDIA API (Llama)
 - Tailwind CSS
+- NVIDIA API (Llama)
 - Mastra project structure
 
 ## Setup
@@ -39,12 +38,11 @@ Create:
 
 Add:
 
-NVIDIA_API_KEY=your_key
+NVIDIA_API_KEY=your_key_here
 
 ## Design Decisions
 
-- Reduced model size from 70B → 8B for faster response
+- Reduced model size from 70B → 8B for faster inference
 - Structured JSON output for reliable rendering
-- Dynamic competitor generation
-- Progress visualization for dimension scores
-- Modular architecture separating metadata, LLM, parsing, and UI
+- Dynamic recommendation generation
+- Modular architecture separating metadata, LLM logic and parsing
